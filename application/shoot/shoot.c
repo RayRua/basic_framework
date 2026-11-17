@@ -235,7 +235,14 @@ void ShootInit()
             .angle_feedback_source = MOTOR_FEED, .speed_feedback_source = MOTOR_FEED,
             .outer_loop_type = SPEED_LOOP, // 初始化成SPEED_LOOP,让拨盘停在原地,防止拨盘上电时乱转
             .close_loop_type = CURRENT_LOOP | SPEED_LOOP,
-            .motor_reverse_flag = MOTOR_DIRECTION_REVERSE, // 注意方向设置为拨盘的拨出的击发方向
+            /*
+             * 当前 Sentinel 云台的拨弹盘安装方向与原全向轮机构相反。
+             *
+             * DJIMotorControl() 会对该标志统一施加方向符号，因此这里
+             * 反转后，正常连发、LOAD_REVERSE 以及卡弹恢复的反向动作都会
+             * 一起翻转，恢复动作仍然保持“相对正常拨弹方向反向”。
+             */
+            .motor_reverse_flag = MOTOR_DIRECTION_NORMAL,
         },
         .motor_type = M2006 // 英雄使用m3508
     };
